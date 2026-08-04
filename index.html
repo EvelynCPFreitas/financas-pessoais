@@ -3,15 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Controle</title>
-    <!-- Link para o arquivo de estilo que criaremos a seguir -->
+    <title>Controle de Casa</title>
+    <!-- Link para o seu arquivo style.css (precisa existir no repositório) -->
     <link rel="stylesheet" href="style.css">
+    <!-- Estilos específicos para a tela de CASA (adicionados aqui para simplificar) -->
+    <style>
+        /* Estilos da Área Principal de Conteúdo (sobrescrevemos o centralizado) */
+        .content {
+            flex: 1;
+            background-color: #f1f5f9;
+            padding: 40px;
+            display: block; /* Mudamos de flex para block para posicionar livremente */
+            position: relative;
+        }
+
+        /* Título "CASA" */
+        .content h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            color: #333333;
+            margin: 0;
+            margin-bottom: 30px;
+        }
+
+        /* Título "ADICIONAR:" */
+        .content h2 {
+            font-size: 1.5rem;
+            color: #555;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            font-weight: normal;
+        }
+
+        /* Campos de Input (as caixas de texto) */
+        .input-field {
+            display: block;
+            width: 350px;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #555;
+            border-radius: 20px; /* Bordas arredondadas */
+            background-color: transparent;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        /* Campos do topo (à direita na imagem) */
+        .top-fields {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .top-fields .input-field {
+            width: 250px; /* Campos menores no topo */
+        }
+
+        /* Botão "O que temos" */
+        .action-button {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            width: 150px;
+            height: 80px;
+            border: 2px solid #333;
+            border-radius: 20px;
+            background-color: transparent;
+            font-size: 1.2rem;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-    <!-- Contêiner principal que divide a tela em duas partes -->
+    <!-- Contêiner principal -->
     <div class="main-container">
         
-        <!-- Barra Lateral (Sidebar) com o menu -->
+        <!-- Barra Lateral (Sidebar) - Mantivemos igual -->
         <nav class="sidebar">
             <div class="menu-items">
                 <a href="index.html" class="active">CASA</a>
@@ -21,10 +96,27 @@
             </div>
         </nav>
 
-        <!-- Área Principal de Conteúdo -->
+        <!-- Área Principal de Conteúdo - Conteúdo da tela CASA -->
         <main class="content">
-            <h1>FINANÇAS</h1>
-            <!-- Aqui você pode adicionar o conteúdo da sua planilha ou dashboard -->
+            <!-- Título Principal -->
+            <h1>CASA</h1>
+
+            <!-- Campos do topo (Saldo e Objetivo) -->
+            <div class="top-fields">
+                <input type="text" class="input-field" placeholder="Saldo Atual : R$">
+                <input type="text" class="input-field" placeholder="Objetivo : R$">
+                <input type="text" class="input-field" placeholder="Adicionar valor ao saldo atual : R$">
+            </div>
+
+            <!-- Seção ADICIONAR -->
+            <h2>ADICIONAR:</h2>
+            <input type="text" class="input-field" placeholder="Categoria">
+            <input type="text" class="input-field" placeholder="Valor: R$">
+            <input type="text" class="input-field" placeholder="Espaço para escrever o que é">
+
+            <!-- Botão O que temos -->
+            <button class="action-button">Oque<br>temos</button>
+
         </main>
 
     </div>
