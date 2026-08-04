@@ -152,6 +152,12 @@
             background-color: transparent;
             font-size: 1rem;
             color: #333;
+            outline: none;
+        }
+
+        /* Estilo específico para o campo select de lugar para manter o padrão */
+        select.input-field {
+            cursor: pointer;
         }
 
         .top-fields {
@@ -227,12 +233,21 @@
                 <div class="top-fields">
                     <input type="text" id="casa-saldo" class="input-field" placeholder="Saldo Atual : R$ 0,00" readonly>
                     <input type="text" id="casa-objetivo" class="input-field" placeholder="Objetivo : R$ 0,00" readonly>
-                    <!-- Adicionado o evento onkeydown para detectar a tecla Enter -->
                     <input type="number" id="casa-add-saldo" class="input-field" placeholder="Adicionar valor ao saldo atual : R$" onkeydown="adicionarSaldoComEnter(event)">
                 </div>
 
                 <h2>ADICIONAR:</h2>
-                <input type="text" id="casa-lugar" class="input-field" placeholder="Lugar">
+                <!-- Campo Lugar transformado em opções de seleção (Select) -->
+                <select id="casa-lugar" class="input-field">
+                    <option value="" disabled selected>Selecione o lugar</option>
+                    <option value="SALA">SALA</option>
+                    <option value="COZINHA">COZINHA</option>
+                    <option value="SALA DE JANTAR">SALA DE JANTAR</option>
+                    <option value="QUARTO">QUARTO</option>
+                    <option value="BANHEIRO">BANHEIRO</option>
+                    <option value="LAVANDERIA">LAVANDERIA</option>
+                </select>
+
                 <input type="number" id="casa-valor" class="input-field" placeholder="Valor: R$" oninput="calcularObjetivo()">
                 <input type="text" id="casa-item" class="input-field" placeholder="Espaço para escrever o que é">
 
@@ -290,19 +305,15 @@
             document.getElementById('casa-objetivo').value = `Objetivo : R$ ${objetivoTotal.toFixed(2)}`;
         }
 
-        // Nova função para somar ao saldo atual apenas ao pressionar Enter
         function adicionarSaldoComEnter(event) {
             if (event.key === 'Enter') {
                 const inputElement = document.getElementById('casa-add-saldo');
                 const addValor = parseFloat(inputElement.value) || 0;
                 
-                // Soma o valor digitado ao saldo acumulado anterior
                 saldoAtual += addValor;
                 
-                // Atualiza o campo visual do saldo atual
                 document.getElementById('casa-saldo').value = `Saldo Atual : R$ ${saldoAtual.toFixed(2)}`;
                 
-                // Limpa o campo de input para o usuário digitar um próximo valor
                 inputElement.value = '';
             }
         }
