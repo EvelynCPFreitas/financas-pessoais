@@ -34,12 +34,11 @@
             height: 100%;
             left: 0;
             top: 0;
-            transform: translateX(-250px); /* Inicia fechada */
+            transform: translateX(-250px);
             transition: transform 0.3s ease;
             z-index: 10;
         }
 
-        /* Quando aberta */
         .sidebar.open {
             transform: translateX(0);
         }
@@ -64,7 +63,6 @@
             color: white;
         }
 
-        /* Botão da Seta Lateral para Abrir/Fechar */
         .toggle-sidebar-btn {
             position: absolute;
             top: 20px;
@@ -94,18 +92,18 @@
             overflow-y: auto;
         }
 
-        /* Sistema de Telas */
         .screen {
             display: none;
             height: 100%;
             width: 100%;
+            position: relative;
         }
 
         .screen.active {
             display: block;
         }
 
-        /* TELA FINANÇAS (Inicial) */
+        /* TELA FINANÇAS */
         #tela-financas {
             display: flex;
             justify-content: center;
@@ -124,7 +122,7 @@
             font-size: 4rem;
             font-weight: 900;
             color: #333333;
-            margin: 0 0 30px 0;
+            margin: 0 0 20px 0;
         }
 
         #tela-casa h2 {
@@ -149,8 +147,8 @@
 
         .top-fields {
             position: absolute;
-            top: 40px;
-            right: 40px;
+            top: 0;
+            right: 0;
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -162,8 +160,8 @@
 
         .action-button {
             position: absolute;
-            bottom: 40px;
-            right: 40px;
+            bottom: 0;
+            right: 0;
             width: 150px;
             height: 80px;
             border: 2px solid #333;
@@ -178,11 +176,10 @@
             text-align: center;
         }
 
-        /* Seta para voltar na tela de Casa */
         .back-btn {
             position: absolute;
-            bottom: 20px;
-            left: 40px;
+            bottom: 0;
+            left: 0;
             background: none;
             border: none;
             font-size: 2rem;
@@ -195,10 +192,8 @@
 
     <div class="main-container">
         
-        <!-- Botão de Seta na Tela Inicial para abrir a barra -->
         <button class="toggle-sidebar-btn" id="openSidebarBtn" onclick="toggleSidebar()">></button>
 
-        <!-- Barra Lateral (Sidebar) -->
         <nav class="sidebar" id="sidebar">
             <button class="toggle-sidebar-btn" onclick="toggleSidebar()">&lt;</button>
             <div class="menu-items">
@@ -209,10 +204,9 @@
             </div>
         </nav>
 
-        <!-- Área Principal de Conteúdo -->
         <main class="content">
             
-            <!-- TELA FINANÇAS (Inicia Ativa) -->
+            <!-- TELA FINANÇAS -->
             <div id="tela-financas" class="screen active">
                 <h1>FINANÇAS</h1>
             </div>
@@ -234,7 +228,6 @@
 
                 <button class="action-button" onclick="verMais()">Ver<br>mais</button>
 
-                <!-- Seta embaixo para voltar a tela inicial -->
                 <button class="back-btn" onclick="mudarTela('financas')">←</button>
             </div>
 
@@ -258,21 +251,19 @@
         let saldoAtual = 0;
         let objetivoTotal = 0;
 
-        // Função para alternar telas
         function mudarTela(nomeTela) {
             const telas = document.querySelectorAll('.screen');
             telas.forEach(tela => tela.classList.remove('active'));
 
             document.getElementById('tela-' + nomeTela).classList.add('active');
 
-            // Se for para a tela inicial, fecha a barra lateral automaticamente para manter o visual limpo
+            // Se for para a tela inicial, fecha a barra lateral
             if(nomeTela === 'financas') {
                 document.getElementById('sidebar').classList.remove('open');
                 document.getElementById('openSidebarBtn').style.display = 'block';
             }
         }
 
-        // Função para abrir e fechar a barra lateral com a seta
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const openBtn = document.getElementById('openSidebarBtn');
@@ -286,14 +277,12 @@
             }
         }
 
-        // Lógica de cálculo do Objetivo baseada nos valores digitados
         function calcularObjetivo() {
             const valorInput = parseFloat(document.getElementById('casa-valor').value) || 0;
-            objetivoTotal = valorInput; // Atualiza com o valor inserido
+            objetivoTotal = valorInput;
             document.getElementById('casa-objetivo').value = `Objetivo : R$ ${objetivoTotal.toFixed(2)}`;
         }
 
-        // Lógica para adicionar valor ao saldo atual
         function adicionarSaldo() {
             const addValor = parseFloat(document.getElementById('casa-add-saldo').value) || 0;
             saldoAtual = addValor;
