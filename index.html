@@ -3,22 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle de Finanças</title>
-    <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f9; color: #333; padding: 20px; max-width: 600px; margin: auto; }
-        h1 { color: #5b21b6; }
-        .card { background: white; padding: 15px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-    </style>
+    <title>Painel de Controle</title>
+    <!-- Link para o arquivo de estilo que criaremos a seguir -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Minhas Finanças</h1>
-    <div class="card">
-        <h3>Saldo Atual</h3>
-        <p>R$ 0,00</p>
-    </div>
-    <div class="card">
-        <h3>Últimos Lançamentos</h3>
-        <p>Nenhum lançamento registrado ainda.</p>
+    <!-- Contêiner principal que divide a tela em duas partes -->
+    <div class="main-container">
+        
+        <!-- Barra Lateral (Sidebar) com o menu -->
+        <nav class="sidebar">
+            <div class="menu-items">
+                <a href="index.html" class="active">CASA</a>
+                <a href="casamento.html">CASAMENTO</a>
+                <a href="viagem.html">VIAGEM</a>
+                <a href="financas.html">FINANÇAS</a>
+            </div>
+        </nav>
+
+        <!-- Área Principal de Conteúdo -->
+        <main class="content">
+            <h1>FINANÇAS</h1>
+            <!-- Aqui você pode adicionar o conteúdo da sua planilha ou dashboard -->
+        </main>
+
     </div>
 </body>
 </html>
