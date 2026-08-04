@@ -1,0 +1,66 @@
+/* --- Estilos Gerais --- */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fonte similar à imagem */
+}
+
+.main-container {
+    display: flex; /* Isso coloca a barra lateral e o conteúdo lado a lado */
+    height: 100vh; /* Ocupa toda a altura da tela */
+}
+
+/* --- Estilos da Barra Lateral (Sidebar) --- */
+.sidebar {
+    width: 20%; /* Largura da barra roxa */
+    /* Cria o degradê exato da imagem */
+    background: linear-gradient(to bottom, #a855f7, #4f46e5); 
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centraliza os itens verticalmente */
+}
+
+.menu-items {
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* Espaçamento entre os itens do menu */
+    padding-left: 40px; /* Distância da borda esquerda */
+}
+
+.menu-items a {
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.2rem;
+    /* Cor cinza escura dos textos do menu */
+    color: #333333; 
+    transition: color 0.3s;
+}
+
+/* Efeito ao passar o mouse (opcional, mas melhora a UX) */
+.menu-items a:hover {
+    color: white;
+}
+
+/* Indica qual página está ativa (no caso, a página 'index.html' é "CASA") */
+.menu-items a.active {
+    color: #111111; /* Um pouco mais escuro para destacar */
+    text-decoration: underline; /* Sublinha o item ativo */
+}
+
+/* --- Estilos da Área Principal --- */
+.content {
+    flex: 1; /* Ocupa o resto do espaço da tela */
+    background-color: #f1f5f9; /* Fundo cinza claro da imagem */
+    display: flex;
+    justify-content: center; /* Centraliza o título FINANÇAS horizontalmente */
+    align-items: center; /* Centraliza o título verticalmente */
+}
+
+.content h1 {
+    font-size: 5rem; /* Tamanho gigante da fonte */
+    font-weight: 900;
+    /* Cor cinza escura do título */
+    color: #333333; 
+    margin: 0;
+}
