@@ -15,7 +15,7 @@
             height: 100vh;
             width: 100vw;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden; /* Remove qualquer barra de rolagem da página inteira */
+            overflow: hidden;
             background-color: #f1f5f9;
         }
 
@@ -24,6 +24,7 @@
             height: 100vh;
             width: 100vw;
             position: relative;
+            overflow: hidden;
         }
 
         /* --- Barra Lateral (Sidebar) --- */
@@ -33,13 +34,13 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            position: absolute;
+            position: fixed;
             height: 100vh;
             left: 0;
             top: 0;
             transform: translateX(-250px);
             transition: transform 0.3s ease;
-            z-index: 50; /* Garante que fique acima de tudo quando aberta */
+            z-index: 100;
         }
 
         .sidebar.open {
@@ -62,7 +63,7 @@
             transition: color 0.3s;
         }
 
-        .menu-items a:hover, .menu-items a.active {
+        .menu-items a:hover {
             color: white;
         }
 
@@ -76,7 +77,7 @@
             font-weight: bold;
             color: #333;
             cursor: pointer;
-            z-index: 20;
+            z-index: 50;
         }
 
         .sidebar .toggle-sidebar-btn {
@@ -89,17 +90,19 @@
         .content {
             flex: 1;
             height: 100vh;
-            width: 100%;
+            width: 100vw;
             position: relative;
-            padding: 40px;
-            overflow: hidden; /* Garante que nada saia da tela principal */
+            overflow: hidden;
         }
 
         .screen {
             display: none;
-            height: 100%;
-            width: 100%;
-            position: relative;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 100vw;
+            padding: 40px;
         }
 
         .screen.active {
@@ -108,16 +111,19 @@
 
         /* TELA FINANÇAS */
         #tela-financas {
-            display: flex;
+            display: none;
             justify-content: center;
             align-items: center;
+        }
+
+        #tela-financas.active {
+            display: flex;
         }
 
         #tela-financas h1 {
             font-size: 5rem;
             font-weight: 900;
             color: #333333;
-            margin: 0;
         }
 
         /* TELA CASA */
@@ -150,8 +156,8 @@
 
         .top-fields {
             position: absolute;
-            top: 0;
-            right: 0;
+            top: 40px;
+            right: 40px;
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -163,8 +169,8 @@
 
         .action-button {
             position: absolute;
-            bottom: 0;
-            right: 0;
+            bottom: 40px;
+            right: 40px;
             width: 150px;
             height: 80px;
             border: 2px solid #333;
@@ -181,8 +187,8 @@
 
         .back-btn {
             position: absolute;
-            bottom: 0;
-            left: 0;
+            bottom: 40px;
+            left: 40px;
             background: none;
             border: none;
             font-size: 2.5rem;
@@ -200,10 +206,10 @@
         <nav class="sidebar" id="sidebar">
             <button class="toggle-sidebar-btn" onclick="toggleSidebar()">&lt;</button>
             <div class="menu-items">
-                <a onclick="mudarTela('casa')" id="menu-casa">CASA</a>
-                <a onclick="mudarTela('casamento')" id="menu-casamento">CASAMENTO</a>
-                <a onclick="mudarTela('viagem')" id="menu-viagem">VIAGEM</a>
-                <a onclick="mudarTela('financas')" id="menu-financas">FINANÇAS</a>
+                <a onclick="mudarTela('casa')">CASA</a>
+                <a onclick="mudarTela('casamento')">CASAMENTO</a>
+                <a onclick="mudarTela('viagem')">VIAGEM</a>
+                <a onclick="mudarTela('financas')">FINANÇAS</a>
             </div>
         </nav>
 
@@ -255,14 +261,14 @@
         let objetivoTotal = 0;
 
         function mudarTela(nomeTela) {
-            // Esconde todas as telas
+            // Remove a classe active de todas as telas para sumirem de vez
             const telas = document.querySelectorAll('.screen');
             telas.forEach(tela => tela.classList.remove('active'));
 
-            // Mostra a tela clicada
+            // Ativa apenas a tela escolhida
             document.getElementById('tela-' + nomeTela).classList.add('active');
 
-            // FECHA o menu lateral automaticamente sempre que qualquer tópico for clicado
+            // Fecha a barra lateral automaticamente
             document.getElementById('sidebar').classList.remove('open');
             document.getElementById('openSidebarBtn').style.display = 'block';
         }
