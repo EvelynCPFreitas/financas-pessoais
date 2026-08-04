@@ -227,7 +227,8 @@
                 <div class="top-fields">
                     <input type="text" id="casa-saldo" class="input-field" placeholder="Saldo Atual : R$ 0,00" readonly>
                     <input type="text" id="casa-objetivo" class="input-field" placeholder="Objetivo : R$ 0,00" readonly>
-                    <input type="number" id="casa-add-saldo" class="input-field" placeholder="Adicionar valor ao saldo atual : R$" oninput="adicionarSaldo()">
+                    <!-- Adicionado o evento onkeydown para detectar a tecla Enter -->
+                    <input type="number" id="casa-add-saldo" class="input-field" placeholder="Adicionar valor ao saldo atual : R$" onkeydown="adicionarSaldoComEnter(event)">
                 </div>
 
                 <h2>ADICIONAR:</h2>
@@ -261,14 +262,11 @@
         let objetivoTotal = 0;
 
         function mudarTela(nomeTela) {
-            // Remove a classe active de todas as telas para sumirem de vez
             const telas = document.querySelectorAll('.screen');
             telas.forEach(tela => tela.classList.remove('active'));
 
-            // Ativa apenas a tela escolhida
             document.getElementById('tela-' + nomeTela).classList.add('active');
 
-            // Fecha a barra lateral automaticamente
             document.getElementById('sidebar').classList.remove('open');
             document.getElementById('openSidebarBtn').style.display = 'block';
         }
@@ -292,10 +290,21 @@
             document.getElementById('casa-objetivo').value = `Objetivo : R$ ${objetivoTotal.toFixed(2)}`;
         }
 
-        function adicionarSaldo() {
-            const addValor = parseFloat(document.getElementById('casa-add-saldo').value) || 0;
-            saldoAtual = addValor;
-            document.getElementById('casa-saldo').value = `Saldo Atual : R$ ${saldoAtual.toFixed(2)}`;
+        // Nova função para somar ao saldo atual apenas ao pressionar Enter
+        function adicionarSaldoComEnter(event) {
+            if (event.key === 'Enter') {
+                const inputElement = document.getElementById('casa-add-saldo');
+                const addValor = parseFloat(inputElement.value) || 0;
+                
+                // Soma o valor digitado ao saldo acumulado anterior
+                saldoAtual += addValor;
+                
+                // Atualiza o campo visual do saldo atual
+                document.getElementById('casa-saldo').value = `Saldo Atual : R$ ${saldoAtual.toFixed(2)}`;
+                
+                // Limpa o campo de input para o usuário digitar um próximo valor
+                inputElement.value = '';
+            }
         }
 
         function verMais() {
