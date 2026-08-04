@@ -3,31 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle de Casa</title>
-    <!-- Link para o seu arquivo style.css (precisa existir no repositório) -->
-    <link rel="stylesheet" href="style.css">
-    <!-- Estilos específicos para a tela de CASA (adicionados aqui para simplificar) -->
+    <title>Painel de Controle</title>
     <style>
-        /* Estilos da Área Principal de Conteúdo (sobrescrevemos o centralizado) */
+        * {
+            box-sizing: border-box;
+        }
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        .main-container {
+            display: flex;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* --- Barra Lateral (Sidebar) --- */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(to bottom, #a855f7, #4f46e5);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            transition: transform 0.3s ease;
+            z-index: 10;
+        }
+
+        /* Classe para esconder a barra lateral quando clicar na seta */
+        .sidebar.collapsed {
+            transform: translateX(-250px);
+        }
+
+        .menu-items {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            padding-left: 40px;
+        }
+
+        .menu-items a {
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #333333;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .menu-items a:hover, .menu-items a.active {
+            color: white;
+        }
+
+        /* Botão da Seta para Recolher/Expandir */
+        .toggle-btn {
+            position: absolute;
+            top: 20px;
+            right: -40px;
+            width: 40px;
+            height: 40px;
+            background: #4f46e5;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-radius: 0 8px 8px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+
+        /* --- Área Principal --- */
         .content {
             flex: 1;
             background-color: #f1f5f9;
             padding: 40px;
-            display: block; /* Mudamos de flex para block para posicionar livremente */
             position: relative;
+            overflow-y: auto;
         }
 
-        /* Título "CASA" */
-        .content h1 {
-            font-size: 4rem;
+        /* Sistema de Telas (Alterna entre visível e oculto) */
+        .screen {
+            display: none;
+            height: 100%;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Estilo da Tela FINANÇAS (Inicial) */
+        #tela-financas {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #tela-financas h1 {
+            font-size: 5rem;
             font-weight: 900;
             color: #333333;
             margin: 0;
-            margin-bottom: 30px;
         }
 
-        /* Título "ADICIONAR:" */
-        .content h2 {
+        /* Estilo da Tela CASA */
+        #tela-casa h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            color: #333333;
+            margin: 0 0 30px 0;
+        }
+
+        #tela-casa h2 {
             font-size: 1.5rem;
             color: #555;
             margin-top: 20px;
@@ -35,20 +127,18 @@
             font-weight: normal;
         }
 
-        /* Campos de Input (as caixas de texto) */
         .input-field {
             display: block;
             width: 350px;
             padding: 10px;
             margin-bottom: 15px;
             border: 1px solid #555;
-            border-radius: 20px; /* Bordas arredondadas */
+            border-radius: 20px;
             background-color: transparent;
             font-size: 1rem;
             color: #333;
         }
 
-        /* Campos do topo (à direita na imagem) */
         .top-fields {
             position: absolute;
             top: 40px;
@@ -59,10 +149,9 @@
         }
 
         .top-fields .input-field {
-            width: 250px; /* Campos menores no topo */
+            width: 250px;
         }
 
-        /* Botão "O que temos" */
         .action-button {
             position: absolute;
             bottom: 40px;
@@ -83,42 +172,87 @@
     </style>
 </head>
 <body>
-    <!-- Contêiner principal -->
+
     <div class="main-container">
         
-        <!-- Barra Lateral (Sidebar) - Mantivemos igual -->
-        <nav class="sidebar">
+        <!-- Barra Lateral com a Seta -->
+        <nav class="sidebar" id="sidebar">
+            <button class="toggle-btn" id="toggleBtn" onclick="toggleSidebar()">◀</button>
             <div class="menu-items">
-                <a href="index.html" class="active">CASA</a>
-                <a href="casamento.html">CASAMENTO</a>
-                <a href="viagem.html">VIAGEM</a>
-                <a href="financas.html">FINANÇAS</a>
+                <a onclick="mudarTela('casa')" id="menu-casa">CASA</a>
+                <a onclick="mudarTela('casamento')" id="menu-casamento">CASAMENTO</a>
+                <a onclick="mudarTela('viagem')" id="menu-viagem">VIAGEM</a>
+                <a onclick="mudarTela('financas')" id="menu-financas" class="active">GASTOS / FINANÇAS</a>
             </div>
         </nav>
 
-        <!-- Área Principal de Conteúdo - Conteúdo da tela CASA -->
+        <!-- Área Principal de Conteúdo -->
         <main class="content">
-            <!-- Título Principal -->
-            <h1>CASA</h1>
-
-            <!-- Campos do topo (Saldo e Objetivo) -->
-            <div class="top-fields">
-                <input type="text" class="input-field" placeholder="Saldo Atual : R$">
-                <input type="text" class="input-field" placeholder="Objetivo : R$">
-                <input type="text" class="input-field" placeholder="Adicionar valor ao saldo atual : R$">
+            
+            <!-- TELA FINANÇAS (Inicia ativa) -->
+            <div id="tela-financas" class="screen active">
+                <h1>FINANÇAS</h1>
             </div>
 
-            <!-- Seção ADICIONAR -->
-            <h2>ADICIONAR:</h2>
-            <input type="text" class="input-field" placeholder="Categoria">
-            <input type="text" class="input-field" placeholder="Valor: R$">
-            <input type="text" class="input-field" placeholder="Espaço para escrever o que é">
+            <!-- TELA CASA -->
+            <div id="tela-casa" class="screen">
+                <h1>CASA</h1>
+                <div class="top-fields">
+                    <input type="text" class="input-field" placeholder="Saldo Atual : R$">
+                    <input type="text" class="input-field" placeholder="Objetivo : R$">
+                    <input type="text" class="input-field" placeholder="Adicionar valor ao saldo atual : R$">
+                </div>
+                <h2>ADICIONAR:</h2>
+                <input type="text" class="input-field" placeholder="Categoria">
+                <input type="text" class="input-field" placeholder="Valor: R$">
+                <input type="text" class="input-field" placeholder="Espaço para escrever o que é">
+                <button class="action-button">Oque<br>temos</button>
+            </div>
 
-            <!-- Botão O que temos -->
-            <button class="action-button">Oque<br>temos</button>
+            <!-- TELA CASAMENTO (Modelo pronto para preencher depois) -->
+            <div id="tela-casamento" class="screen">
+                <h1>CASAMENTO</h1>
+            </div>
+
+            <!-- TELA VIAGEM (Modelo pronto para preencher depois) -->
+            <div id="tela-viagem" class="screen">
+                <h1>VIAGEM</h1>
+            </div>
 
         </main>
 
     </div>
+
+    <script>
+        // Função para alternar entre as telas ao clicar no menu
+        function mudarTela(nomeTela) {
+            // Esconde todas as telas
+            const telas = document.querySelectorAll('.screen');
+            telas.forEach(tela => tela.classList.remove('active'));
+
+            // Remove a classe active de todos os links do menu
+            const links = document.querySelectorAll('.menu-items a');
+            links.forEach(link => link.classList.remove('active'));
+
+            // Mostra a tela escolhida e ativa o link correspondente
+            document.getElementById('tela-' + nomeTela).classList.add('active');
+            document.getElementById('menu-' + nomeTela).classList.add('active');
+        }
+
+        // Função para abrir e fechar a barra lateral com a seta
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.getElementById('toggleBtn');
+            
+            sidebar.classList.toggle('collapsed');
+
+            // Muda o ícone da seta dependendo do estado da barra
+            if (sidebar.classList.contains('collapsed')) {
+                toggleBtn.innerHTML = '▶';
+            } else {
+                toggleBtn.innerHTML = '◀';
+            }
+        }
+    </script>
 </body>
 </html>
