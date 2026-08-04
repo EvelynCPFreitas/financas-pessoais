@@ -14,6 +14,7 @@
             height: 100%;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
+            background-color: #f1f5f9;
         }
 
         .main-container {
@@ -29,14 +30,18 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            position: relative;
+            position: absolute;
+            height: 100%;
+            left: 0;
+            top: 0;
+            transform: translateX(-250px); /* Inicia fechada */
             transition: transform 0.3s ease;
             z-index: 10;
         }
 
-        /* Classe para esconder a barra lateral quando clicar na seta */
-        .sidebar.collapsed {
-            transform: translateX(-250px);
+        /* Quando aberta */
+        .sidebar.open {
+            transform: translateX(0);
         }
 
         .menu-items {
@@ -59,45 +64,48 @@
             color: white;
         }
 
-        /* Botão da Seta para Recolher/Expandir */
-        .toggle-btn {
+        /* Botão da Seta Lateral para Abrir/Fechar */
+        .toggle-sidebar-btn {
             position: absolute;
             top: 20px;
-            right: -40px;
-            width: 40px;
-            height: 40px;
-            background: #4f46e5;
+            left: 20px;
+            background: none;
             border: none;
-            color: white;
-            font-size: 1.2rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
             cursor: pointer;
-            border-radius: 0 8px 8px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            z-index: 20;
+        }
+
+        .sidebar .toggle-sidebar-btn {
+            left: auto;
+            right: 15px;
+            color: white;
         }
 
         /* --- Área Principal --- */
         .content {
             flex: 1;
-            background-color: #f1f5f9;
-            padding: 40px;
+            width: 100%;
+            height: 100%;
             position: relative;
+            padding: 40px;
             overflow-y: auto;
         }
 
-        /* Sistema de Telas (Alterna entre visível e oculto) */
+        /* Sistema de Telas */
         .screen {
             display: none;
             height: 100%;
+            width: 100%;
         }
 
         .screen.active {
             display: block;
         }
 
-        /* Estilo da Tela FINANÇAS (Inicial) */
+        /* TELA FINANÇAS (Inicial) */
         #tela-financas {
             display: flex;
             justify-content: center;
@@ -111,7 +119,7 @@
             margin: 0;
         }
 
-        /* Estilo da Tela CASA */
+        /* TELA CASA */
         #tela-casa h1 {
             font-size: 4rem;
             font-weight: 900;
@@ -149,7 +157,7 @@
         }
 
         .top-fields .input-field {
-            width: 250px;
+            width: 280px;
         }
 
         .action-button {
@@ -169,27 +177,42 @@
             align-items: center;
             text-align: center;
         }
+
+        /* Seta para voltar na tela de Casa */
+        .back-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 40px;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #333;
+        }
     </style>
 </head>
 <body>
 
     <div class="main-container">
         
-        <!-- Barra Lateral com a Seta -->
+        <!-- Botão de Seta na Tela Inicial para abrir a barra -->
+        <button class="toggle-sidebar-btn" id="openSidebarBtn" onclick="toggleSidebar()">></button>
+
+        <!-- Barra Lateral (Sidebar) -->
         <nav class="sidebar" id="sidebar">
-            <button class="toggle-btn" id="toggleBtn" onclick="toggleSidebar()">◀</button>
+            <button class="toggle-sidebar-btn" onclick="toggleSidebar()">&lt;</button>
             <div class="menu-items">
                 <a onclick="mudarTela('casa')" id="menu-casa">CASA</a>
                 <a onclick="mudarTela('casamento')" id="menu-casamento">CASAMENTO</a>
                 <a onclick="mudarTela('viagem')" id="menu-viagem">VIAGEM</a>
-                <a onclick="mudarTela('financas')" id="menu-financas" class="active">GASTOS / FINANÇAS</a>
+                <a onclick="mudarTela('financas')" id="menu-financas">FINANÇAS</a>
             </div>
         </nav>
 
         <!-- Área Principal de Conteúdo -->
         <main class="content">
             
-            <!-- TELA FINANÇAS (Inicia ativa) -->
+            <!-- TELA FINANÇAS (Inicia Ativa) -->
             <div id="tela-financas" class="screen active">
                 <h1>FINANÇAS</h1>
             </div>
@@ -197,26 +220,34 @@
             <!-- TELA CASA -->
             <div id="tela-casa" class="screen">
                 <h1>CASA</h1>
+                
                 <div class="top-fields">
-                    <input type="text" class="input-field" placeholder="Saldo Atual : R$">
-                    <input type="text" class="input-field" placeholder="Objetivo : R$">
-                    <input type="text" class="input-field" placeholder="Adicionar valor ao saldo atual : R$">
+                    <input type="text" id="casa-saldo" class="input-field" placeholder="Saldo Atual : R$ 0,00" readonly>
+                    <input type="text" id="casa-objetivo" class="input-field" placeholder="Objetivo : R$ 0,00" readonly>
+                    <input type="number" id="casa-add-saldo" class="input-field" placeholder="Adicionar valor ao saldo atual : R$" oninput="adicionarSaldo()">
                 </div>
+
                 <h2>ADICIONAR:</h2>
-                <input type="text" class="input-field" placeholder="Categoria">
-                <input type="text" class="input-field" placeholder="Valor: R$">
-                <input type="text" class="input-field" placeholder="Espaço para escrever o que é">
-                <button class="action-button">Oque<br>temos</button>
+                <input type="text" id="casa-lugar" class="input-field" placeholder="Lugar">
+                <input type="number" id="casa-valor" class="input-field" placeholder="Valor: R$" oninput="calcularObjetivo()">
+                <input type="text" id="casa-item" class="input-field" placeholder="Espaço para escrever o que é">
+
+                <button class="action-button" onclick="verMais()">Ver<br>mais</button>
+
+                <!-- Seta embaixo para voltar a tela inicial -->
+                <button class="back-btn" onclick="mudarTela('financas')">←</button>
             </div>
 
-            <!-- TELA CASAMENTO (Modelo pronto para preencher depois) -->
+            <!-- TELA CASAMENTO -->
             <div id="tela-casamento" class="screen">
                 <h1>CASAMENTO</h1>
+                <button class="back-btn" onclick="mudarTela('financas')">←</button>
             </div>
 
-            <!-- TELA VIAGEM (Modelo pronto para preencher depois) -->
+            <!-- TELA VIAGEM -->
             <div id="tela-viagem" class="screen">
                 <h1>VIAGEM</h1>
+                <button class="back-btn" onclick="mudarTela('financas')">←</button>
             </div>
 
         </main>
@@ -224,34 +255,53 @@
     </div>
 
     <script>
-        // Função para alternar entre as telas ao clicar no menu
+        let saldoAtual = 0;
+        let objetivoTotal = 0;
+
+        // Função para alternar telas
         function mudarTela(nomeTela) {
-            // Esconde todas as telas
             const telas = document.querySelectorAll('.screen');
             telas.forEach(tela => tela.classList.remove('active'));
 
-            // Remove a classe active de todos os links do menu
-            const links = document.querySelectorAll('.menu-items a');
-            links.forEach(link => link.classList.remove('active'));
-
-            // Mostra a tela escolhida e ativa o link correspondente
             document.getElementById('tela-' + nomeTela).classList.add('active');
-            document.getElementById('menu-' + nomeTela).classList.add('active');
+
+            // Se for para a tela inicial, fecha a barra lateral automaticamente para manter o visual limpo
+            if(nomeTela === 'financas') {
+                document.getElementById('sidebar').classList.remove('open');
+                document.getElementById('openSidebarBtn').style.display = 'block';
+            }
         }
 
         // Função para abrir e fechar a barra lateral com a seta
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.getElementById('toggleBtn');
+            const openBtn = document.getElementById('openSidebarBtn');
             
-            sidebar.classList.toggle('collapsed');
-
-            // Muda o ícone da seta dependendo do estado da barra
-            if (sidebar.classList.contains('collapsed')) {
-                toggleBtn.innerHTML = '▶';
+            sidebar.classList.toggle('open');
+            
+            if (sidebar.classList.contains('open')) {
+                openBtn.style.display = 'none';
             } else {
-                toggleBtn.innerHTML = '◀';
+                openBtn.style.display = 'block';
             }
+        }
+
+        // Lógica de cálculo do Objetivo baseada nos valores digitados
+        function calcularObjetivo() {
+            const valorInput = parseFloat(document.getElementById('casa-valor').value) || 0;
+            objetivoTotal = valorInput; // Atualiza com o valor inserido
+            document.getElementById('casa-objetivo').value = `Objetivo : R$ ${objetivoTotal.toFixed(2)}`;
+        }
+
+        // Lógica para adicionar valor ao saldo atual
+        function adicionarSaldo() {
+            const addValor = parseFloat(document.getElementById('casa-add-saldo').value) || 0;
+            saldoAtual = addValor;
+            document.getElementById('casa-saldo').value = `Saldo Atual : R$ ${saldoAtual.toFixed(2)}`;
+        }
+
+        function verMais() {
+            alert("Redirecionando para a listagem completa dos itens...");
         }
     </script>
 </body>
