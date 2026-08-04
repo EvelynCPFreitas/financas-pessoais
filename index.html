@@ -155,7 +155,6 @@
             outline: none;
         }
 
-        /* Estilo específico para o campo select de lugar para manter o padrão */
         select.input-field {
             cursor: pointer;
         }
@@ -201,6 +200,52 @@
             cursor: pointer;
             color: #333;
         }
+
+        /* --- TELA LUGARES (VER MAIS) --- */
+        #tela-lugares {
+            position: relative;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .lugares-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+            padding: 0 100px;
+        }
+
+        .lugares-coluna {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .bloco-lugar {
+            width: 280px;
+            height: 110px;
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .titulo-central-lugares {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #333;
+            letter-spacing: 2px;
+        }
     </style>
 </head>
 <body>
@@ -237,7 +282,6 @@
                 </div>
 
                 <h2>ADICIONAR:</h2>
-                <!-- Campo Lugar transformado em opções de seleção (Select) -->
                 <select id="casa-lugar" class="input-field">
                     <option value="" disabled selected>Selecione o lugar</option>
                     <option value="SALA">SALA</option>
@@ -251,9 +295,31 @@
                 <input type="number" id="casa-valor" class="input-field" placeholder="Valor: R$" oninput="calcularObjetivo()">
                 <input type="text" id="casa-item" class="input-field" placeholder="Espaço para escrever o que é">
 
-                <button class="action-button" onclick="verMais()">Ver<br>mais</button>
+                <!-- Botão Ver Mais redireciona para a tela de Lugares -->
+                <button class="action-button" onclick="mudarTela('lugares')">Ver<br>mais</button>
 
                 <button class="back-btn" onclick="mudarTela('financas')">←</button>
+            </div>
+
+            <!-- TELA LUGARES (VER MAIS) -->
+            <div id="tela-lugares" class="screen">
+                <div class="titulo-central-lugares">LUGARES</div>
+                
+                <div class="lugares-container">
+                    <div class="lugares-coluna">
+                        <div class="bloco-lugar">SALA</div>
+                        <div class="bloco-lugar">COZINHA</div>
+                        <div class="bloco-lugar">SALA DE JANTAR</div>
+                    </div>
+                    
+                    <div class="lugares-coluna">
+                        <div class="bloco-lugar">QUARTO</div>
+                        <div class="bloco-lugar">BANHEIRO</div>
+                        <div class="bloco-lugar">LAVANDERIA</div>
+                    </div>
+                </div>
+
+                <button class="back-btn" onclick="mudarTela('casa')">←</button>
             </div>
 
             <!-- TELA CASAMENTO -->
@@ -316,10 +382,6 @@
                 
                 inputElement.value = '';
             }
-        }
-
-        function verMais() {
-            alert("Redirecionando para a listagem completa dos itens...");
         }
     </script>
 </body>
